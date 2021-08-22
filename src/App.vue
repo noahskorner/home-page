@@ -4,7 +4,7 @@
     class="font-primary"
     :style="{ width: `${width}px`, height: `${height}px` }"
   >
-    <Sidebar :show="showSidebar" @toggleSidebar="toggleSidebar()" />
+    <Sidebar />
     <div class="current-time">
       <h1>{{ currentTime }}</h1>
       <h2>Welcome home, Noah</h2>
@@ -15,7 +15,6 @@
 <script>
 import useCurrentTime from "./composables/useCurrentTime";
 import Sidebar from "./components/Sidebar.vue";
-import useSidebar from "./composables/useSidebar";
 import useWindowSize from "./composables/useWindowSize";
 export default {
   name: "Home",
@@ -25,14 +24,11 @@ export default {
   setup() {
     const { width, height } = useWindowSize();
     const { currentTime } = useCurrentTime();
-    const { showSidebar, toggleSidebar } = useSidebar();
 
     return {
       width,
       height,
       currentTime,
-      showSidebar,
-      toggleSidebar,
     };
   },
 };
@@ -53,12 +49,14 @@ export default {
   color: white;
   font-size: 7rem;
   text-align: center;
-  padding: 5rem;
-  border-radius: 0.5rem;
+  padding: 2rem 1rem;
+  border-radius: 1rem;
+  margin: 1rem;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .current-time > h2 {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 @media (min-width: 640px) {

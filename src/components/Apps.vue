@@ -2,12 +2,18 @@
   <div class="apps">
     <h2 class="apps-header">My Apps</h2>
     <div class="app-grid">
-      <div class="app" v-for="(app, index) in apps" :key="index">
+      <a
+        class="app"
+        v-for="(app, index) in apps"
+        :key="index"
+        :href="app.url"
+        target="_blank"
+      >
         <div class="app-logo">
           <img :src="`http://www.google.com/s2/favicons?domain=${app.url}`" />
         </div>
         <h6>{{ app.name }}</h6>
-      </div>
+      </a>
     </div>
   </div>
 </template>

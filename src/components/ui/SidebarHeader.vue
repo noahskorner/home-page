@@ -11,7 +11,7 @@ export default {};
 <style scoped>
 .sidebar-header {
   width: 75%;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 500;
   color: white;
   border-bottom: 1px solid white;

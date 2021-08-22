@@ -1,0 +1,92 @@
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/* CSS Variables */
+:root {
+  /* --gray-00: #f5f6f7; */
+}
+
+/* Fonts */
+.font-primary {
+  font-family: "Urbanist", sans-serif;
+}
+
+/* Transitions */
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: 0.4s;
+}
+
+.slide-left-enter-from {
+  transform: translate(-100%, 0);
+}
+.slide-left-leave-to {
+  transform: translate(-100%, 0);
+}
+
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: 1s;
+}
+
+.slide-right-enter-from {
+  transform: translate(100%, 0);
+}
+.slide-right-leave-to {
+  transform: translate(100%, 0);
+}
+
+.slide-in {
+  animation: slide-in 0.5s forwards;
+  -webkit-animation: slide-in 0.5s forwards;
+}
+
+@keyframes slide-in {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-in {
+  0% { -webkit-transform: translateX(-100%); }
+  100% { -webkit-transform: translateX(0%); }
+}
+
+.slide-out {
+  animation: slide-out 0.5s forwards;
+  -webkit-animation: slide-out 0.5s forwards;
+}
+
+@keyframes slide-out {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+@-webkit-keyframes slide-out {
+  0% { -webkit-transform: translateX(0%); }
+  100% { -webkit-transform: translateX(-100%); }
+}
+
+.rotate-90 {
+  animation: rotate-90 0.5s forwards;
+  -webkit-animation: rotate-90 0.5s forwards;
+}
+
+.-rotate-90 {
+  animation: -rotate-90 0.5s forwards;
+  -webkit-animation: -rotate-90 0.5s forwards;
+}
+
+@keyframes rotate-90 {
+  100% { transform: rotate(90deg); }
+}
+
+@-webkit-keyframes rotate-90 {
+  100% { -webkit-transform: rotate(90deg); }
+}
+
+@keyframes -rotate-90 {
+  100% { transform: rotate(-90deg); }
+}
+
+@-webkit-keyframes -rotate-90 {
+  100% { -webkit-transform: rotate(-90deg); }
+}

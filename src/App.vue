@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { computed } from "@vue/reactivity";
 import useCurrentTime from "./composables/useCurrentTime";
 import Sidebar from "./components/Sidebar.vue";
 import useSidebar from "./composables/useSidebar";
@@ -31,8 +30,8 @@ export default {
     return {
       width,
       height,
-      currentTime: computed(() => currentTime.value),
-      showSidebar: computed(() => showSidebar.value),
+      currentTime,
+      showSidebar,
       toggleSidebar,
     };
   },

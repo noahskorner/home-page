@@ -1,6 +1,6 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 
-export default function () {
+export default () => {
   let windowWidth = ref(window.innerWidth);
   let windowHeight = ref(window.innerHeight);
 
@@ -17,4 +17,4 @@ export default function () {
   const height = computed(() => windowHeight.value);
 
   return { width, height };
-}
+};

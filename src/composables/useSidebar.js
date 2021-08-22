@@ -7,6 +7,7 @@ export default () => {
       state.showSidebar = !state.showSidebar;
     },
   });
+
   return {
     showSidebar: computed(() => state.showSidebar),
     toggleSidebar: state.toggleSidebar,

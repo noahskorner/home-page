@@ -1,5 +1,5 @@
 <template>
-  <div class="apps" :class="show ? ['slide-in'] : ['slide-out']">
+  <div class="sidebar" :class="show ? ['slide-in'] : ['slide-out']">
     <button
       class="apps-btn"
       @click="$emit('toggleSidebar')"
@@ -8,8 +8,8 @@
       <svg
         style="background: transparent"
         xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
+        width="28"
+        height="28"
         viewBox="0 0 24 24"
         fill="currentColor"
         stroke-width="5"
@@ -22,43 +22,16 @@
         />
       </svg>
     </button>
-    <div class="app-grid">
-      <div class="app">
-        <div class="app-logo">
-          <img src="https://www.google.com/favicon.ico" />
-        </div>
-        <h6>Google</h6>
-      </div>
-      <div class="app">
-        <div class="app-logo">
-          <img src="https://www.google.com/favicon.ico" />
-        </div>
-        <h6>Google</h6>
-      </div>
-      <div class="app">
-        <div class="app-logo">
-          <img src="https://www.google.com/favicon.ico" />
-        </div>
-        <h6>Google</h6>
-      </div>
-      <div class="app">
-        <div class="app-logo">
-          <img src="https://www.google.com/favicon.ico" />
-        </div>
-        <h6>Google</h6>
-      </div>
-      <div class="app">
-        <div class="app-logo">
-          <img src="https://www.google.com/favicon.ico" />
-        </div>
-        <h6>Google</h6>
-      </div>
-    </div>
+    <Apps />
   </div>
 </template>
 
 <script>
+import Apps from "./Apps.vue";
 export default {
+  components: {
+    Apps,
+  },
   props: {
     show: {
       type: Boolean,
@@ -70,7 +43,7 @@ export default {
 </script>
 
 <style scoped>
-.apps {
+.sidebar {
   position: fixed;
   top: 0;
   left: 0;
@@ -87,69 +60,20 @@ export default {
 .apps-btn {
   position: absolute;
   top: 0.5rem;
-  right: -4rem;
+  right: -3.5rem;
   background-color: rgba(1, 1, 1, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   border: none;
   border-radius: 50%;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3rem;
+  height: 3rem;
   color: white;
   cursor: pointer;
 }
 
 .apps-btn:hover {
   background-color: rgba(1, 1, 1, 0.7);
-}
-
-.app-grid {
-  width: calc(100% - 2rem);
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1rem;
-  padding: 1rem;
-}
-
-.app {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-.app > h6 {
-  font-size: 1rem;
-  color: white;
-  margin: 0.5rem 0;
-}
-
-.app-logo {
-  padding: 0;
-  margin: 0.25rem;
-  width: 4rem;
-  height: 4rem;
-  background-color: rgba(1, 1, 1, 0.8);
-
-  border-radius: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.app:hover > .app-logo {
-  margin: 0;
-  padding: 0.25rem;
-}
-
-.app:hover > h6 {
-  font-weight: 600;
-}
-
-.app-logo > img {
-  height: 32px;
-  width: 32px;
 }
 </style>

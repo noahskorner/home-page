@@ -1,15 +1,28 @@
-import { computed, reactive } from "vue";
+import { reactive, toRefs } from "vue";
+
+const sidebars = {
+  apps: 1,
+  todos: 2,
+};
+
+const state = reactive({
+  showSidebar: false,
+  currentSidebar: sidebars.apps,
+});
 
 export default () => {
-  const state = reactive({
-    showSidebar: true,
-    toggleSidebar: () => {
-      state.showSidebar = !state.showSidebar;
-    },
-  });
+  const toggleSidebar = (showSidebar) => {
+    state.showSidebar = showSidebar;
+  };
+
+  const setCurrentSidebar = (newSidebar) => {
+    state.currentSidebar = newSidebar;
+  };
 
   return {
-    showSidebar: computed(() => state.showSidebar),
-    toggleSidebar: state.toggleSidebar,
+    sidebars,
+    ...toRefs(state),
+    toggleSidebar,
+    setCurrentSidebar,
   };
 };

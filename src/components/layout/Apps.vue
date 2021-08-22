@@ -1,6 +1,6 @@
 <template>
-  <div class="apps">
-    <h2 class="apps-header">My Apps</h2>
+  <div class="sidebar-container">
+    <SidebarHeader>My Apps</SidebarHeader>
     <div class="app-grid">
       <a
         class="app"
@@ -10,7 +10,11 @@
         target="_blank"
       >
         <div class="app-logo">
-          <img :src="`http://www.google.com/s2/favicons?domain=${app.url}`" />
+          <img
+            :src="`http://www.google.com/s2/favicons?domain=${getFaviconUrl(
+              app.url
+            )}`"
+          />
         </div>
         <h6>{{ app.name }}</h6>
       </a>
@@ -19,31 +23,23 @@
 </template>
 
 <script>
-import useApps from "../composables/useApps";
+import SidebarHeader from "../ui/SidebarHeader.vue";
+import useApps from "../../composables/useApps";
 export default {
+  components: {
+    SidebarHeader,
+  },
   setup() {
-    const { apps } = useApps();
+    const { apps, getFaviconUrl } = useApps();
     return {
       apps,
+      getFaviconUrl,
     };
   },
 };
 </script>
 
 <style scoped>
-.apps {
-  width: calc(100% - 2rem);
-  padding: 1rem;
-}
-
-.apps-header {
-  width: 75%;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: white;
-  border-bottom: 2px solid white;
-}
-
 .app-grid {
   margin-top: 1rem;
   width: 100%;
@@ -61,8 +57,8 @@ export default {
 }
 
 .app > h6 {
-  line-height: 1.5rem;
-  font-size: 1rem;
+  line-height: 1rem;
+  font-size: 0.75rem;
   color: white;
   max-width: 5rem;
   overflow: hidden;
@@ -73,8 +69,8 @@ export default {
 .app-logo {
   padding: 0;
   margin: 0.15rem;
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
   background-color: rgba(1, 1, 1, 0.8);
   border-radius: 1rem;
   display: flex;

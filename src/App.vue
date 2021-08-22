@@ -14,7 +14,7 @@
 
 <script>
 import useCurrentTime from "./composables/useCurrentTime";
-import Sidebar from "./components/Sidebar.vue";
+import Sidebar from "./components/layout/Sidebar.vue";
 import useWindowSize from "./composables/useWindowSize";
 export default {
   name: "Home",
@@ -47,12 +47,11 @@ export default {
 
 .current-time {
   color: white;
-  font-size: 7rem;
+  font-size: var(--font-xl);
   text-align: center;
   padding: 2rem 1rem;
   border-radius: 1rem;
   margin: 1rem;
-  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .current-time > h2 {

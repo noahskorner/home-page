@@ -1,8 +1,8 @@
 <template>
   <div class="sidebar" :class="showSidebar ? ['slide-in'] : ['slide-out']">
-    <SidebarButtons />
     <Apps v-if="currentSidebar === sidebars.apps" />
     <Todos v-else-if="currentSidebar === sidebars.todos" />
+    <SidebarButtons />
   </div>
 </template>
 

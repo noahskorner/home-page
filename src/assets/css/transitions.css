@@ -1,28 +1,4 @@
 /* Transitions */
-.slide-left-enter-active,
-.slide-left-leave-active {
-  transition: 0.4s;
-}
-
-.slide-left-enter-from {
-  transform: translate(-100%, 0);
-}
-.slide-left-leave-to {
-  transform: translate(-100%, 0);
-}
-
-.slide-right-enter-active,
-.slide-right-leave-active {
-  transition: 1s;
-}
-
-.slide-right-enter-from {
-  transform: translate(100%, 0);
-}
-.slide-right-leave-to {
-  transform: translate(100%, 0);
-}
-
 .slide-in {
   animation: slide-in 0.5s forwards;
   -webkit-animation: slide-in 0.5s forwards;
@@ -132,4 +108,45 @@
 @-webkit-keyframes slide-down-1{
   0% { -webkit-transform: translateY(-7em); }
   100% { -webkit-transform: translateY(0%); }
+}
+
+.user {
+  animation: user 0.5s forwards;
+  -webkit-animation: user 0.5s forwards;
+}
+
+.slide-down {
+  animation: slide-down 0.5s forwards;
+  -webkit-animation: slide-down 0.5s forwards;
+}
+
+@keyframes user {
+  100% { transform: translateY(0rem); }
+}
+@-webkit-keyframes user {
+  100% { -webkit-transform: translateY(0rem); }
+}
+
+@keyframes slide-down{
+  0% { transform: translateY(-3.5rem); }
+  100% { transform: translateY(0%); }
+}
+
+@-webkit-keyframes slide-down{
+  0% { -webkit-transform: translateY(-3.5rem); }
+  100% { -webkit-transform: translateY(0%); }
+}
+
+.user-modal-enter-active,
+.user-modal-leave-active {
+  transition: 0.2s;
+}
+
+.user-modal-enter-from {
+  transform: translateY(-0.5rem);
+  opacity: 0;
+}
+.user-modal-leave-to {
+  transform: translateY(-0.5rem);
+  opacity: 0;
 }

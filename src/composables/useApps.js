@@ -54,7 +54,6 @@ export default () => {
   };
   const getFaviconUrl = (url) => {
     const re = /\/([^/,\s]+\.[^/,\s]+?)(?=\/|,|\s|$|\?|#)/;
-    console.log(re.exec(url));
     const faviconUrl = re.exec(url);
     return faviconUrl && faviconUrl.length > 1 ? faviconUrl[1] : url;
   };

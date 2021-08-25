@@ -105,21 +105,4 @@ export default {
 .sidebar-btns > button {
   margin-bottom: 0.5rem;
 }
-
-.btn {
-  background-color: rgba(1, 1, 1, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
-  color: white;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background-color: rgba(1, 1, 1, 0.7);
-}
 </style>

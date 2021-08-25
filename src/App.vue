@@ -4,6 +4,7 @@
     class="font-primary"
     :style="{ width: `${width}px`, height: `${height}px` }"
   >
+    <UserModal />
     <Sidebar />
     <div class="current-time">
       <h1>{{ currentTime }}</h1>
@@ -15,11 +16,13 @@
 <script>
 import useCurrentTime from "./composables/useCurrentTime";
 import Sidebar from "./components/layout/Sidebar.vue";
+import UserModal from "./components/ui/UserModal.vue";
 import useWindowSize from "./composables/useWindowSize";
 export default {
   name: "Home",
   components: {
     Sidebar,
+    UserModal,
   },
   setup() {
     const { width, height } = useWindowSize();
@@ -44,7 +47,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
-
 .current-time {
   color: white;
   font-size: var(--font-xl);
@@ -52,6 +54,7 @@ export default {
   padding: 2rem 1rem;
   border-radius: 1rem;
   margin: 1rem;
+  font-size: 5rem;
 }
 
 .current-time > h2 {

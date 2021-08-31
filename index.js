@@ -1,19 +1,61 @@
+const cors = require("cors");
 const express = require("express");
 const app = express();
-const cors = require("cors");
 const pool = require("./db");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 // MIDDLEWARE
 app.use(cors());
 app.use(express.json()); //req.body
 
 // ROUTES
-app.get("/", async (req, res) => {
-  try {
-    res.json("hello world");
+app.post("/users", async (req, res) => {
+ try {
+    const { email, password } = req.body;
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = await pool.query(
+      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
+      [email, hashedPassword]
+    );
+
+    res.status(201).json(newUser.rows[0]);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send();
   }
-  catch (err) {
-    console.log(err.message)
+})
+
+app.post("/users/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await pool.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email]
+    );
+
+    if(!user.rows.length){
+      return res.status(400).send('User with that email / password combination does not exist.')
+    }
+
+    try {
+      if (await bcrypt.compare(password, user.rows[0].password)){
+        return res.json(user.rows[0]);
+      }
+      else{
+        return res.status(400).send('User with that email / password combination does not exist.')
+      }
+    } 
+    catch (error) {
+      console.log(error.message);
+      res.status(500).send();
+    }
+  }
+  catch (error) {
+    console.log(error.message);
+    res.status(500).send();
   }
 })
 
@@ -33,8 +75,8 @@ app.post("/todos", async (req, res) => {
     );
 
     res.json(newTodo.rows[0]);
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
   }
 });
 
@@ -44,8 +86,8 @@ app.get("/todos", async (req, res) => {
   try {
     const allTodos = await pool.query("SELECT * FROM todo");
     res.json(allTodos.rows);
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
   }
 });
 
@@ -59,8 +101,8 @@ app.get("/todos/:id", async (req, res) => {
     ]);
 
     res.json(todo.rows[0]);
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
   }
 });
 
@@ -76,8 +118,8 @@ app.put("/todos/:id", async (req, res) => {
     );
 
     res.json("Todo was updated!");
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
   }
 });
 
@@ -90,8 +132,8 @@ app.delete("/todos/:id", async (req, res) => {
       id
     ]);
     res.json("Todo was deleted!");
-  } catch (err) {
-    console.log(err.message);
+  } catch (error) {
+    console.log(error.message);
   }
 });
 

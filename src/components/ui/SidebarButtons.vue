@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar-btns">
     <!-- Back Button -->
-    <button class="btn" @click="toggleSidebar(false)" v-if="showSidebar">
+    <button class="btn" @click="setSidebar(false)" v-if="showSidebar">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -19,13 +19,7 @@
       </svg>
     </button>
     <!-- Apps Button -->
-    <button
-      class="btn"
-      @click="
-        showSidebar ? setCurrentSidebar(sidebars.apps) : toggleSidebar(true)
-      "
-      :class="showSidebar ? ['slide-down'] : ['slide-up']"
-    >
+    <button class="btn" @click="setSidebar(true)" v-if="!showSidebar">
       <svg
         style="background: transparent"
         xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +41,7 @@
     <button
       class="btn"
       @click="setCurrentSidebar(sidebars.todos)"
-      :class="showSidebar ? ['slide-down-1'] : ['slide-up-1']"
+      :class="showSidebar ? ['slide-down'] : ['slide-up']"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +72,7 @@ export default {
       sidebars,
       showSidebar,
       currentSidebar,
-      toggleSidebar,
+      setSidebar,
       setCurrentSidebar,
     } = useSidebar();
 
@@ -86,7 +80,7 @@ export default {
       sidebars,
       showSidebar,
       currentSidebar,
-      toggleSidebar,
+      setSidebar,
       setCurrentSidebar,
     };
   },

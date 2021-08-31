@@ -7,12 +7,13 @@ const sidebars = {
 
 const state = reactive({
   showSidebar: false,
-  currentSidebar: sidebars.apps,
+  currentSidebar: sidebars.todos,
 });
 
 export default () => {
-  const toggleSidebar = (showSidebar) => {
-    state.showSidebar = showSidebar;
+  const setSidebar = (newShowSidebar) => {
+    state.showSidebar = newShowSidebar;
+    state.showSidebar;
   };
 
   const setCurrentSidebar = (newSidebar) => {
@@ -22,7 +23,7 @@ export default () => {
   return {
     sidebars,
     ...toRefs(state),
-    toggleSidebar,
+    setSidebar,
     setCurrentSidebar,
   };
 };

@@ -3,9 +3,14 @@
 /* CSS Variables */
 :root {
   /* --gray-00: #f5f6f7; */
+  --rounded: 0.5rem;
+  --font-sm: 0.8rem;
 }
 
 /* Fonts */
+a, button {
+  font-family: "Urbanist", sans-serif;
+}
 .font-primary {
   font-family: "Urbanist", sans-serif;
 }
@@ -31,4 +36,3 @@
 .btn:hover {
   background-color: rgba(1, 1, 1, 0.7);
 }
-

@@ -1,24 +1,6 @@
 <template>
   <div class="sidebar-container">
-    <SidebarHeader>My Apps</SidebarHeader>
-    <div class="app-grid">
-      <a
-        class="app"
-        v-for="(app, index) in apps"
-        :key="index"
-        :href="app.url"
-        target="_blank"
-      >
-        <div class="app-logo">
-          <img
-            :src="`http://www.google.com/s2/favicons?domain=${getFaviconUrl(
-              app.url
-            )}`"
-          />
-        </div>
-        <h6>{{ app.name }}</h6>
-      </a>
-    </div>
+    <SidebarHeader>Board View</SidebarHeader>
   </div>
 </template>
 

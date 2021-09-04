@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar-container">
-    <SidebarHeader>My Todos</SidebarHeader>
+    <SidebarHeader>List View</SidebarHeader>
   </div>
 </template>
 

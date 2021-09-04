@@ -7,7 +7,8 @@ Content-Type:  application/json
 
 {
     "email" : "noahskorner@gmail.com",
-    "password" : "password123"
+    "password1" : "Password123",
+    "password2" : "Password123"
 }
 
 ###
@@ -16,5 +17,5 @@ Content-Type:  application/json
 
 {
     "email" : "noahskorner@gmail.com",
-    "password" : "password123"
+    "password" : "Password123"
 }

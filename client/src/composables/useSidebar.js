@@ -1,19 +1,18 @@
 import { reactive, toRefs } from "vue";
 
 const sidebars = {
-  apps: 1,
-  todos: 2,
+  todoList: 0,
+  todoBoard: 1,
 };
 
 const state = reactive({
   showSidebar: false,
-  currentSidebar: sidebars.todos,
+  currentSidebar: sidebars.todoList,
 });
 
 export default () => {
-  const setSidebar = (newShowSidebar) => {
+  const setShowSidebar = (newShowSidebar) => {
     state.showSidebar = newShowSidebar;
-    state.showSidebar;
   };
 
   const setCurrentSidebar = (newSidebar) => {
@@ -23,7 +22,7 @@ export default () => {
   return {
     sidebars,
     ...toRefs(state),
-    setSidebar,
+    setShowSidebar,
     setCurrentSidebar,
   };
 };

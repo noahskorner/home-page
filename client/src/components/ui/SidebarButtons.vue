@@ -1,8 +1,9 @@
 <template>
   <div class="sidebar-btns">
-    <!-- Back Button -->
-    <button class="btn" @click="setSidebar(false)" v-if="showSidebar">
+    <!-- Menu / Back Button -->
+    <button class="btn menu-btn" @click="setShowSidebar(!showSidebar)">
       <svg
+        v-if="showSidebar"
         xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"
@@ -17,10 +18,8 @@
         <path d="M11 5l-7 7 7 7" />
         <path d="M4 12h16" />
       </svg>
-    </button>
-    <!-- Apps Button -->
-    <button class="btn" @click="setSidebar(true)" v-if="!showSidebar">
       <svg
+        v-else
         style="background: transparent"
         xmlns="http://www.w3.org/2000/svg"
         width="28"
@@ -37,10 +36,10 @@
         />
       </svg>
     </button>
-    <!-- Todos Button -->
+    <!-- Todo List Button -->
     <button
       class="btn"
-      @click="setCurrentSidebar(sidebars.todos)"
+      @click="setCurrentSidebar(sidebars.todoList)"
       :class="showSidebar ? ['slide-down'] : ['slide-up']"
     >
       <svg
@@ -53,11 +52,38 @@
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="ai ai-DoubleCheck"
+        class="ai ai-Clipboard"
       >
-        <path d="M2 12l5.25 5 2.625-3" />
-        <path d="M8 12l5.25 5L22 7" />
-        <path d="M16 7l-3.5 4" />
+        <path
+          d="M15.5 4H18a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2.5"
+        />
+        <path
+          d="M8.621 3.515A2 2 0 0 1 10.561 2h2.877a2 2 0 0 1 1.94 1.515L16 6H8l.621-2.485z"
+        />
+        <path d="M9 12h6" />
+        <path d="M9 16h6" />
+      </svg>
+    </button>
+    <!-- Todo Board Button -->
+    <button
+      class="btn"
+      @click="setCurrentSidebar(sidebars.todoBoard)"
+      :class="showSidebar ? ['slide-down-1'] : ['slide-up-1']"
+    >
+      <svg
+        width="24"
+        height="24"
+        role="presentation"
+        focusable="false"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M3 5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5ZM5 6C5 5.44772 5.44772 5 6 5H10C10.5523 5 11 5.44772 11 6V16C11 16.5523 10.5523 17 10 17H6C5.44772 17 5 16.5523 5 16V6ZM14 5C13.4477 5 13 5.44772 13 6V12C13 12.5523 13.4477 13 14 13H18C18.5523 13 19 12.5523 19 12V6C19 5.44772 18.5523 5 18 5H14Z"
+          fill="currentColor"
+        ></path>
       </svg>
     </button>
   </div>
@@ -72,7 +98,7 @@ export default {
       sidebars,
       showSidebar,
       currentSidebar,
-      setSidebar,
+      setShowSidebar,
       setCurrentSidebar,
     } = useSidebar();
 
@@ -80,7 +106,7 @@ export default {
       sidebars,
       showSidebar,
       currentSidebar,
-      setSidebar,
+      setShowSidebar,
       setCurrentSidebar,
     };
   },

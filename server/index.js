@@ -4,6 +4,7 @@ const app = express();
 const pool = require("./db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { validateNewUser } = require("./common/functions");
 
 // MIDDLEWARE
 app.use(cors());
@@ -11,53 +12,61 @@ app.use(express.json()); //req.body
 
 // ROUTES
 app.post("/users", async (req, res) => {
- try {
-    const { email, password } = req.body;
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
+  try {
+    const { email, password1, password2 } = req.body;
 
-    const newUser = await pool.query(
-      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
-      [email, hashedPassword]
-    );
+    const errors = await validateNewUser(email, password1, password2);
 
-    res.status(201).json(newUser.rows[0]);
+    if (errors.length) res.status(400).json({ errors });
+    else {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(password1, salt);
+
+      const result = await pool.query(
+        "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
+        [email, hashedPassword]
+      );
+      const user = result.rows[0];
+
+      res.status(201).json(user);
+    }
   } catch (error) {
     console.log(error.message);
     res.status(500).send();
   }
-})
+});
 
 app.post("/users/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await pool.query(
-      "SELECT * FROM users WHERE email = $1",
-      [email]
-    );
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
 
-    if(!user.rows.length){
-      return res.status(400).send('User with that email / password combination does not exist.')
+    if (!result.rows.length) {
+      return res
+        .status(400)
+        .send("User with that email / password combination does not exist.");
     }
 
     try {
-      if (await bcrypt.compare(password, user.rows[0].password)){
-        return res.json(user.rows[0]);
+      const user = result.rows[0];
+      if (await bcrypt.compare(password, user.password)) {
+        return res.json(user);
+      } else {
+        return res
+          .status(400)
+          .send("User with that email / password combination does not exist.");
       }
-      else{
-        return res.status(400).send('User with that email / password combination does not exist.')
-      }
-    } 
-    catch (error) {
+    } catch (error) {
       console.log(error.message);
       res.status(500).send();
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error.message);
     res.status(500).send();
   }
-})
+});
 
 // SERVER START
 app.listen(3000, () => {

@@ -1,27 +1,39 @@
 <template>
-  <div class="sidebar" :class="showSidebar ? ['slide-in'] : ['slide-out']">
-    <Apps v-if="currentSidebar === sidebars.apps" />
-    <Todos v-else-if="currentSidebar === sidebars.todos" />
+  <div class="sidebar" :class="sidebarClass">
+    <TodoList v-if="currentSidebar === sidebars.todoList" />
+    <TodoBoard v-else-if="currentSidebar === sidebars.todoBoard" />
     <SidebarButtons />
   </div>
 </template>
 
 <script>
+import { computed } from "@vue/reactivity";
 import useSidebar from "../../composables/useSidebar";
 import SidebarButtons from "../ui/SidebarButtons.vue";
-import Apps from "./Apps.vue";
-import Todos from "./Todos.vue";
+import TodoList from "./TodoList.vue";
+import TodoBoard from "./TodoBoard.vue";
 
 export default {
   components: {
     SidebarButtons,
-    Apps,
-    Todos,
+    TodoList,
+    TodoBoard,
   },
   setup() {
     const { sidebars, showSidebar, currentSidebar } = useSidebar();
 
-    return { sidebars, showSidebar, currentSidebar };
+    const sidebarClass = computed(() => {
+      switch (currentSidebar.value) {
+        case sidebars.todoList:
+          return [showSidebar.value ? "slide-in" : "slide-out"];
+        case sidebars.todoBoard:
+          return ["sidebar-full", showSidebar.value ? "slide-in" : "slide-out"];
+        default:
+          return [showSidebar.value ? "slide-in" : "slide-out"];
+      }
+    });
+
+    return { sidebars, showSidebar, currentSidebar, sidebarClass };
   },
 };
 </script>
@@ -32,12 +44,16 @@ export default {
   top: 0;
   left: 0;
   height: 100vh;
-  width: calc(100% - 4.5rem);
+  width: calc(100% - 4rem);
   max-width: 25rem;
   background-color: rgba(1, 1, 1, 0.7);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+}
+
+.sidebar-full {
+  max-width: 90%;
 }
 </style>

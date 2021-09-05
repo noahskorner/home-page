@@ -34,7 +34,7 @@ app.post("/register", async (req, res) => {
       );
       const user = result.rows[0];
 
-      return res.status(201).json(user);
+      return res.status(201).json({ email: user.email });
     }
   } catch (error) {
     console.log(error.message);
@@ -50,9 +50,9 @@ app.post("/login", async (req, res) => {
     ]);
 
     if (!result.rows.length) {
-      return res
-        .status(400)
-        .send("User with that email / password combination does not exist.");
+      return res.status(400).send({
+        errors: ["User with that email / password combination does not exist."],
+      });
     }
 
     try {
@@ -81,9 +81,11 @@ app.post("/login", async (req, res) => {
 
         return res.json({ accessToken, refreshToken });
       } else {
-        return res
-          .status(400)
-          .send("User with that email / password combination does not exist.");
+        return res.status(400).send({
+          errors: [
+            "User with that email / password combination does not exist.",
+          ],
+        });
       }
     } catch (error) {
       console.log(error.message);

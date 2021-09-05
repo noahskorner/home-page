@@ -2,8 +2,8 @@
   <div class="user-container">
     <button
       class="btn user-btn"
-      @click="toggleUserModal()"
-      :class="userBtnClass"
+      @click="toggleUserModal"
+      :class="userModalClass"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +24,11 @@
       </svg>
     </button>
     <transition name="user-modal">
-      <div v-if="showUserModal">
+      <div
+        v-if="showUserModal"
+        v-click-away="hideUserModal"
+        :class="userModalClass"
+      >
         <div class="user-modal">
           <div class="errors" v-if="errors.length">
             <p v-for="(error, index) in errors" :key="index">
@@ -64,15 +68,15 @@ export default {
 
     const { sidebars, showSidebar, currentSidebar } = useSidebar();
 
-    const userBtnClass = computed(() => {
+    const userModalClass = computed(() => {
       if (showSidebar.value) {
         switch (currentSidebar.value) {
           case sidebars.todoList:
-            return ["hide-user-btn"];
+            return ["hide-user-modal"];
           case sidebars.todoBoard:
-            return ["hide-user-btn-full"];
+            return ["hide-user-modal-full"];
           default:
-            return ["hide-user-btn"];
+            return ["hide-user-modal"];
         }
       } else return [];
     });
@@ -84,7 +88,7 @@ export default {
       errors,
       hideUserModal,
       toggleUserModal,
-      userBtnClass,
+      userModalClass,
     };
   },
 };
@@ -112,6 +116,12 @@ export default {
   align-items: center;
 }
 
+@media (max-width: 500px) {
+  .user-modal {
+    width: calc(100vw - 3rem);
+  }
+}
+
 .user-view-container {
   width: 100%;
 }
@@ -121,7 +131,7 @@ export default {
   font-size: var(--font-sm);
   background-color: rgba(55, 55, 55, 0.7);
   color: red;
-  padding: 0.75rem;
+  padding: 8rem;
   border: 1px solid red;
   border-radius: var(--rounded);
 }
@@ -130,13 +140,13 @@ export default {
   margin-top: 0.5rem;
 }
 
-@media (max-width: 600px) {
-  .hide-user-btn {
+@media (max-width: 800px) {
+  .hide-user-modal {
     display: none;
   }
 }
-@media (max-width: 1440px) {
-  .hide-user-btn-full {
+@media (max-width: 1980px) {
+  .hide-user-modal-full {
     display: none;
   }
 }

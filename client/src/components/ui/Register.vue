@@ -43,7 +43,7 @@
       </p>
     </div>
     <div class="shadow-btn btn-container">
-      <button class="text-btn" @click="registerUser()">Register</button>
+      <button class="text-btn" @click="registerUser">Register</button>
       <div class="shadow-btn-bg"></div>
     </div>
     <p class="subscript">

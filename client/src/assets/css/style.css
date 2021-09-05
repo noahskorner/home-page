@@ -61,7 +61,7 @@ a, button {
 
 .shadow-btn button {
   position: relative;
-  z-index: 10;
+  z-index: 1;
   background-color: var(--gray);
 }
 
@@ -119,10 +119,11 @@ a, button {
 .input-group input {
   background-color: transparent;
   border: 1px solid white;
-  padding: 0.75rem;
+  padding: 0.8rem;
   color: white;
   border-radius: var(--rounded);
   font-family: "Urbanist", sans-serif;
+  font-size: 1rem;
 }
 
 .input-group input:focus {

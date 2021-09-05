@@ -15,6 +15,10 @@ export default () => {
     state.showSidebar = newShowSidebar;
   };
 
+  const hideSidebar = () => {
+    setShowSidebar(false);
+  };
+
   const setCurrentSidebar = (newSidebar) => {
     state.currentSidebar = newSidebar;
   };
@@ -23,6 +27,7 @@ export default () => {
     sidebars,
     ...toRefs(state),
     setShowSidebar,
+    hideSidebar,
     setCurrentSidebar,
   };
 };

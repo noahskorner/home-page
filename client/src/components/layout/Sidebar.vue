@@ -20,7 +20,7 @@ export default {
     TodoBoard,
   },
   setup() {
-    const { sidebars, showSidebar, currentSidebar } = useSidebar();
+    const { sidebars, showSidebar, currentSidebar, hideSidebar } = useSidebar();
 
     const sidebarClass = computed(() => {
       switch (currentSidebar.value) {
@@ -33,7 +33,13 @@ export default {
       }
     });
 
-    return { sidebars, showSidebar, currentSidebar, sidebarClass };
+    return {
+      sidebars,
+      showSidebar,
+      currentSidebar,
+      hideSidebar,
+      sidebarClass,
+    };
   },
 };
 </script>
@@ -54,6 +60,6 @@ export default {
 }
 
 .sidebar-full {
-  max-width: 90%;
+  max-width: 75%;
 }
 </style>

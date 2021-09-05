@@ -28,7 +28,7 @@
         <div class="user-modal">
           <div class="errors" v-if="errors.length">
             <p v-for="(error, index) in errors" :key="index">
-              User with email noahskorner@gmail.com already exists.
+              {{ error }}
             </p>
           </div>
           <div class="user-view-container">

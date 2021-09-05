@@ -92,6 +92,7 @@ export default {
         );
     };
     const registerUser = async () => {
+      setErrors([]);
       validateNewUser();
       if (
         state.errors.email.length ||
@@ -100,15 +101,17 @@ export default {
       )
         return;
       else {
-        const payload = {
-          email: state.email,
-          password1: state.password1,
-          password2: state.password2,
-        };
-
         try {
-          const response = await API.register(payload);
-          console.log(response.data);
+          const response = await API.register({
+            email: state.email,
+            password1: state.password1,
+            password2: state.password2,
+          });
+          const newUserEmail = response.data.email;
+          setErrors([
+            `PLACEHOLDER User ${newUserEmail} successfully created. Login now!`,
+          ]);
+          setView(views.login);
         } catch (error) {
           if (error.response) {
             if (error.response.data.errors) {

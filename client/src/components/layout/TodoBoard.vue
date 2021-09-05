@@ -6,17 +6,9 @@
 
 <script>
 import SidebarHeader from "../ui/SidebarHeader.vue";
-import useApps from "../../composables/useApps";
 export default {
   components: {
     SidebarHeader,
-  },
-  setup() {
-    const { apps, getFaviconUrl } = useApps();
-    return {
-      apps,
-      getFaviconUrl,
-    };
   },
 };
 </script>

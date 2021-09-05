@@ -133,7 +133,7 @@ a, button {
 .subscript {
   color: white;
   font-size: var(--font-sm);
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .subscript button {

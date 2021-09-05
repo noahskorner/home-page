@@ -1,5 +1,6 @@
 const pool = require("../db");
-const { emailRegex } = require("../common/constants");
+const jwt = require("jsonwebtoken");
+const { emailRegex, accessTokenExpiration } = require("../common/constants");
 
 const validateNewUser = async (email, password1, password2) => {
   const errors = [];
@@ -27,6 +28,18 @@ const validateNewUser = async (email, password1, password2) => {
   }
 };
 
+const generateAccessToken = (user) => {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: accessTokenExpiration,
+  });
+};
+
+const generateRefreshToken = (user) => {
+  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+};
+
 module.exports = {
   validateNewUser,
+  generateAccessToken,
+  generateRefreshToken,
 };

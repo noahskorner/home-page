@@ -1,8 +1,8 @@
 GET http://localhost:3000/
 Content-Type: application/json
 
-###
-POST http://localhost:3000/users
+### Register a user
+POST http://localhost:3000/register
 Content-Type:  application/json
 
 {
@@ -11,11 +11,24 @@ Content-Type:  application/json
     "password2" : "Password123"
 }
 
-###
-POST http://localhost:3000/users/login
+### Login a user
+POST http://localhost:3000/login
 Content-Type:  application/json
 
 {
     "email" : "noahskorner@gmail.com",
     "password" : "Password123"
+}
+
+### Get all todos for a user
+GET http://localhost:3000/todos
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJub2Foc2tvcm5lckBnbWFpbC5jb20iLCJpYXQiOjE2MzA4MDY0OTUsImV4cCI6MTYzMDgwNjUyMH0.lZYfecL4eZEhAVgH34VZCDlTIum4Vg3KAfvimd_KV1w
+
+### Refresh a token
+POST http://localhost:3000/refresh-token
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJub2Foc2tvcm5lckBnbWFpbC5jb20iLCJpYXQiOjE2MzA4MDY1MjJ9.OK3TazLaB3EPuygCDUgLovAeVv1nX4snQ4_Nh5tkcNs"
 }

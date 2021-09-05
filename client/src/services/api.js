@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:3000/";
+const baseURL = "http://localhost:3000";
 
 const apiClient = axios.create({
   baseURL: baseURL,
@@ -12,6 +12,9 @@ const apiClient = axios.create({
 
 export default {
   register(payload) {
-    return apiClient.post("users", payload);
+    return apiClient.post("/register", payload);
+  },
+  login(payload) {
+    return apiClient.post("/login", payload);
   },
 };

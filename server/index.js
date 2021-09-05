@@ -4,20 +4,26 @@ const app = express();
 const pool = require("./db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { validateNewUser } = require("./common/functions");
+const {
+  validateNewUser,
+  generateAccessToken,
+  generateRefreshToken,
+} = require("./common/functions");
+const { refreshTokenExpiration } = require("./common/constants");
+const { authenticateToken } = require("./middleware/auth");
 
 // MIDDLEWARE
 app.use(cors());
 app.use(express.json()); //req.body
 
 // ROUTES
-app.post("/users", async (req, res) => {
+app.post("/register", async (req, res) => {
   try {
     const { email, password1, password2 } = req.body;
 
     const errors = await validateNewUser(email, password1, password2);
 
-    if (errors.length) res.status(400).json({ errors });
+    if (errors.length) return res.status(400).json({ errors });
     else {
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(password1, salt);
@@ -28,15 +34,15 @@ app.post("/users", async (req, res) => {
       );
       const user = result.rows[0];
 
-      res.status(201).json(user);
+      return res.status(201).json(user);
     }
   } catch (error) {
     console.log(error.message);
-    res.status(500).send();
+    return res.sendStatus(500);
   }
 });
 
-app.post("/users/login", async (req, res) => {
+app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [
@@ -52,7 +58,28 @@ app.post("/users/login", async (req, res) => {
     try {
       const user = result.rows[0];
       if (await bcrypt.compare(password, user.password)) {
-        return res.json(user);
+        const accessToken = generateAccessToken({
+          id: user.id,
+          email: user.email,
+        });
+        const refreshToken = generateRefreshToken({
+          id: user.id,
+          email: user.email,
+        });
+
+        try {
+          const validUntil = new Date();
+          validUntil.setDate(new Date().getDate() + refreshTokenExpiration);
+          await pool.query(
+            "INSERT INTO refresh_tokens (token, valid_until) VALUES ($1, $2)",
+            [refreshToken, validUntil]
+          );
+        } catch (error) {
+          console.log(error.message);
+          return res.sendStatus(500);
+        }
+
+        return res.json({ accessToken, refreshToken });
       } else {
         return res
           .status(400)
@@ -60,11 +87,94 @@ app.post("/users/login", async (req, res) => {
       }
     } catch (error) {
       console.log(error.message);
-      res.status(500).send();
+      return res.sendStatus(500);
     }
   } catch (error) {
     console.log(error.message);
-    res.status(500).send();
+    return res.sendStatus(500);
+  }
+});
+
+app.post("/refresh-token", async (req, res) => {
+  try {
+    const refreshToken = req.body.token;
+    if (refreshToken === null) return res.sendStatus(401);
+    try {
+      // who do you even know here?
+      const result = await pool.query(
+        "SELECT * FROM refresh_tokens WHERE token = $1",
+        [refreshToken]
+      );
+      if (!result.rows.length) return res.sendStatus(403);
+
+      // how old are you chief?
+      if (new Date() > new Date(result.rows[0]["valid_until"])) {
+        // nah fam that token is expired
+        try {
+          await pool.query("DELETE FROM refresh_tokens WHERE token = $1", [
+            refreshToken,
+          ]);
+          return res.sendStatus(403);
+        } catch (error) {
+          console.log(error);
+          return res.sendStatus(500);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+
+    // say bye to that old refresh token pal
+    try {
+      await pool.query("DELETE FROM refresh_tokens WHERE token = $1", [
+        refreshToken,
+      ]);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+    }
+
+    // alright buddy, come in for now
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      async (error, user) => {
+        if (error) res.sendStatus(403);
+        const accessToken = generateAccessToken({
+          id: user.id,
+          email: user.email,
+        });
+        const newRefreshToken = generateRefreshToken({
+          id: user.id,
+          email: user.email,
+        });
+
+        const validUntil = new Date();
+        validUntil.setDate(new Date().getDate() + refreshTokenExpiration);
+        await pool.query(
+          "INSERT INTO refresh_tokens (token, valid_until) VALUES ($1, $2)",
+          [newRefreshToken, validUntil]
+        );
+        return res.json({ accessToken, newRefreshToken });
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+app.get("/todos", authenticateToken, async (req, res) => {
+  try {
+    const { user } = req;
+    const result = await pool.query("SELECT * FROM todos WHERE user_id = $1", [
+      user.id,
+    ]);
+    return res.json(result);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
   }
 });
 
@@ -72,80 +182,3 @@ app.post("/users/login", async (req, res) => {
 app.listen(3000, () => {
   console.log("Server listening on port 3000...");
 });
-
-/* //create a todo
-
-app.post("/todos", async (req, res) => {
-  try {
-    const { description } = req.body;
-    const newTodo = await pool.query(
-      "INSERT INTO todo (description) VALUES($1) RETURNING *",
-      [description]
-    );
-
-    res.json(newTodo.rows[0]);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
-//get all todos
-
-app.get("/todos", async (req, res) => {
-  try {
-    const allTodos = await pool.query("SELECT * FROM todo");
-    res.json(allTodos.rows);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
-//get a todo
-
-app.get("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const todo = await pool.query("SELECT * FROM todo WHERE todo_id = $1", [
-      id
-    ]);
-
-    res.json(todo.rows[0]);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
-//update a todo
-
-app.put("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { description } = req.body;
-    const updateTodo = await pool.query(
-      "UPDATE todo SET description = $1 WHERE todo_id = $2",
-      [description, id]
-    );
-
-    res.json("Todo was updated!");
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
-//delete a todo
-
-app.delete("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [
-      id
-    ]);
-    res.json("Todo was deleted!");
-  } catch (error) {
-    console.log(error.message);
-  }
-});
-
-app.listen(5000, () => {
-  console.log("server has started on port 5000");
-}); */

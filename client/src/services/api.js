@@ -17,4 +17,7 @@ export default {
   login(payload) {
     return apiClient.post("/login", payload);
   },
+  addTodo(payload) {
+    return apiClient.post("/todos", payload);
+  },
 };

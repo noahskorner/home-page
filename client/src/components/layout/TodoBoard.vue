@@ -1,16 +1,9 @@
 <template>
-  <div class="sidebar-container">
-    <SidebarHeader>Board View</SidebarHeader>
-  </div>
+  <div class="sidebar-container"></div>
 </template>
 
 <script>
-import SidebarHeader from "../ui/SidebarHeader.vue";
-export default {
-  components: {
-    SidebarHeader,
-  },
-};
+export default {};
 </script>
 
 <style scoped>

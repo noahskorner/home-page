@@ -155,3 +155,7 @@ a, button {
   padding: 0.25rem;
   display: block;
 }
+
+hr {
+  margin: 1rem 0;
+}

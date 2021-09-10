@@ -24,11 +24,7 @@
       </svg>
     </button>
     <transition name="user-modal">
-      <div
-        v-if="showUserModal"
-        v-click-away="hideUserModal"
-        :class="userModalClass"
-      >
+      <div v-if="showUserModal" :class="userModalClass">
         <div class="user-modal">
           <div class="errors" v-if="errors.length">
             <p v-for="(error, index) in errors" :key="index">
@@ -66,7 +62,7 @@ export default {
       toggleUserModal,
     } = useUserModal();
 
-    const { sidebars, showSidebar, currentSidebar } = useSidebar();
+    const { sidebars, showSidebar, currentSidebar, hideSidebar } = useSidebar();
 
     const userModalClass = computed(() => {
       if (showSidebar.value) {
@@ -88,6 +84,7 @@ export default {
       errors,
       hideUserModal,
       toggleUserModal,
+      hideSidebar,
       userModalClass,
     };
   },
@@ -131,7 +128,7 @@ export default {
   font-size: var(--font-sm);
   background-color: rgba(55, 55, 55, 0.7);
   color: red;
-  padding: 8rem;
+  padding: 0.8rem;
   border: 1px solid red;
   border-radius: var(--rounded);
 }

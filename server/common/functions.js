@@ -38,8 +38,13 @@ const generateRefreshToken = (user) => {
   return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
 };
 
+const validateTodo = (title) => {
+  return [];
+};
+
 module.exports = {
   validateNewUser,
   generateAccessToken,
   generateRefreshToken,
+  validateTodo,
 };

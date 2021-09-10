@@ -8,6 +8,7 @@ const {
   validateNewUser,
   generateAccessToken,
   generateRefreshToken,
+  validateTodo,
 } = require("./common/functions");
 const { refreshTokenExpiration } = require("./common/constants");
 const { authenticateToken } = require("./middleware/auth");
@@ -71,8 +72,8 @@ app.post("/login", async (req, res) => {
           const validUntil = new Date();
           validUntil.setDate(new Date().getDate() + refreshTokenExpiration);
           await pool.query(
-            "INSERT INTO refresh_tokens (token, valid_until) VALUES ($1, $2)",
-            [refreshToken, validUntil]
+            "INSERT INTO refresh_tokens (token, user_id, valid_until) VALUES ($1, $2, $3)",
+            [refreshToken, user.id, validUntil]
           );
         } catch (error) {
           console.log(error.message);
@@ -113,7 +114,7 @@ app.post("/refresh-token", async (req, res) => {
       if (new Date() > new Date(result.rows[0]["valid_until"])) {
         // nah fam that token is expired
         try {
-          await pool.query("DELETE FROM refresh_tokens WHERE token = $1", [
+          await pool.query("DELETE FROM refresh_tokens WHERE token = $1 ", [
             refreshToken,
           ]);
           return res.sendStatus(403);
@@ -155,8 +156,8 @@ app.post("/refresh-token", async (req, res) => {
         const validUntil = new Date();
         validUntil.setDate(new Date().getDate() + refreshTokenExpiration);
         await pool.query(
-          "INSERT INTO refresh_tokens (token, valid_until) VALUES ($1, $2)",
-          [newRefreshToken, validUntil]
+          "INSERT INTO refresh_tokens (token, user_id, valid_until) VALUES ($1, $2, $3)",
+          [newRefreshToken, user.id, validUntil]
         );
         return res.json({ accessToken, newRefreshToken });
       }
@@ -174,6 +175,29 @@ app.get("/todos", authenticateToken, async (req, res) => {
       user.id,
     ]);
     return res.json(result);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+app.post("/todos", authenticateToken, async (req, res) => {
+  try {
+    const { user } = req;
+    const { title } = req.body;
+
+    const errors = await validateTodo(title);
+
+    if (errors.length) return res.status(400).json({ errors });
+    else {
+      const result = await pool.query(
+        "INSERT INTO todos (user_id, title) VALUES ($1, $2) RETURNING *",
+        [user.id, title]
+      );
+
+      const newTodo = result.rows[0];
+      return res.status(200).json(newTodo);
+    }
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

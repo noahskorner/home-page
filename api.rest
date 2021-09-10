@@ -23,12 +23,21 @@ Content-Type:  application/json
 ### Get all todos for a user
 GET http://localhost:3000/todos
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJub2Foc2tvcm5lckBnbWFpbC5jb20iLCJpYXQiOjE2MzA4MDY0OTUsImV4cCI6MTYzMDgwNjUyMH0.lZYfecL4eZEhAVgH34VZCDlTIum4Vg3KAfvimd_KV1w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibm9haHNrb3JuZXJAZ21haWwuY29tIiwiaWF0IjoxNjMxMjM5MjM2LCJleHAiOjE2MzEyMzkyNjF9.SLVm_5F005_rWgzIcPBJ-aytbH7PGWh9kTrCZ5PLaTc
 
 ### Refresh a token
 POST http://localhost:3000/refresh-token
 Content-Type: application/json
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJub2Foc2tvcm5lckBnbWFpbC5jb20iLCJpYXQiOjE2MzA4MDY1MjJ9.OK3TazLaB3EPuygCDUgLovAeVv1nX4snQ4_Nh5tkcNs"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibm9haHNrb3JuZXJAZ21haWwuY29tIiwiaWF0IjoxNjMxMjM5NDYyfQ.ti6looKUp6AjltBSBSPZpnxt1VQClSQYoQCANpUFycw"
+}
+
+### Add a todo
+POST http://localhost:3000/todos
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibm9haHNrb3JuZXJAZ21haWwuY29tIiwiaWF0IjoxNjMxMjQwNDAyLCJleHAiOjE2MzEyNDA0NjJ9.O5MPr-buGWmIPELgwlI85cE_37juRcSi0RHzP7XOisM
+
+{
+    "title" : "Put my plate away"
 }

@@ -17,6 +17,14 @@ const { authenticateToken } = require("./middleware/auth");
 app.use(cors());
 app.use(express.json()); //req.body
 
+/*
+{
+  success,
+  message,
+  data
+}
+*/
+
 // ROUTES
 app.post("/register", async (req, res) => {
   try {
@@ -24,7 +32,12 @@ app.post("/register", async (req, res) => {
 
     const errors = await validateNewUser(email, password1, password2);
 
-    if (errors.length) return res.status(400).json({ errors });
+    if (errors.length)
+      return res.status(400).json({
+        success: true,
+        message: "Unable to create new user.",
+        errors,
+      });
     else {
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(password1, salt);
@@ -35,11 +48,15 @@ app.post("/register", async (req, res) => {
       );
       const user = result.rows[0];
 
-      return res.status(201).json({ email: user.email });
+      return res.status(201).json({
+        success: true,
+        message: `Successfully created user ${email}`,
+        email: user.email,
+      });
     }
   } catch (error) {
     console.log(error.message);
-    return res.sendStatus(500);
+    return res.status(500).json({ success: false, message: error.message });
   }
 });
 
@@ -101,7 +118,7 @@ app.post("/login", async (req, res) => {
 app.post("/refresh-token", async (req, res) => {
   try {
     const refreshToken = req.body.token;
-    if (refreshToken === null) return res.sendStatus(401);
+    if (!refreshToken) return res.sendStatus(401);
     try {
       // who do you even know here?
       const result = await pool.query(
@@ -148,7 +165,7 @@ app.post("/refresh-token", async (req, res) => {
           id: user.id,
           email: user.email,
         });
-        const newRefreshToken = generateRefreshToken({
+        const refreshToken = generateRefreshToken({
           id: user.id,
           email: user.email,
         });
@@ -157,13 +174,45 @@ app.post("/refresh-token", async (req, res) => {
         validUntil.setDate(new Date().getDate() + refreshTokenExpiration);
         await pool.query(
           "INSERT INTO refresh_tokens (token, user_id, valid_until) VALUES ($1, $2, $3)",
-          [newRefreshToken, user.id, validUntil]
+          [refreshToken, user.id, validUntil]
         );
-        return res.json({ accessToken, newRefreshToken });
+        return res.json({ accessToken, refreshToken });
       }
     );
   } catch (error) {
     console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+app.post("/logout", async (req, res) => {
+  try {
+    const refreshToken = req.body.token;
+    if (!refreshToken) return res.sendStatus(401);
+    try {
+      const result = await pool.query(
+        "SELECT * FROM refresh_tokens WHERE token = $1",
+        [refreshToken]
+      );
+      if (!result.rows.length) return res.sendStatus(403);
+
+      try {
+        await pool.query("DELETE FROM refresh_tokens WHERE token = $1 ", [
+          refreshToken,
+        ]);
+        return res
+          .status(200)
+          .json({ success: true, message: "Successfully logged out!" });
+      } catch (error) {
+        console.log(error.message);
+        return res.sendStatus(500);
+      }
+    } catch (error) {
+      console.log(error.message);
+      return res.sendStatus(500);
+    }
+  } catch (error) {
+    console.log(error.message);
     return res.sendStatus(500);
   }
 });
@@ -176,7 +225,7 @@ app.get("/todos", authenticateToken, async (req, res) => {
     ]);
     return res.json(result);
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     return res.sendStatus(500);
   }
 });
@@ -199,7 +248,7 @@ app.post("/todos", authenticateToken, async (req, res) => {
       return res.status(200).json(newTodo);
     }
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     return res.sendStatus(500);
   }
 });

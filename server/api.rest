@@ -33,6 +33,14 @@ Content-Type: application/json
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibm9haHNrb3JuZXJAZ21haWwuY29tIiwiaWF0IjoxNjMxMjM5NDYyfQ.ti6looKUp6AjltBSBSPZpnxt1VQClSQYoQCANpUFycw"
 }
 
+### Logout user
+DELETE http://localhost:3000/Logout
+Content-Type: application/json
+
+{
+    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImVtYWlsIjoibm9haHNrb3JuZXJAZ21haWwuY29tIiwiaWF0IjoxNjMxOTI4MDk0fQ.D7K_7g-myprzDX4rCY_a9EQjlMI7ldhPFfSfNFEASoY"
+}
+
 ### Add a todo
 POST http://localhost:3000/todos
 Content-Type: application/json

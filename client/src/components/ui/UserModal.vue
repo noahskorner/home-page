@@ -34,6 +34,7 @@
           <div class="user-view-container">
             <Login v-if="view === views.login" />
             <Register v-else-if="view === views.register" />
+            <Authenticated v-else-if="view === views.authenticated" />
           </div>
         </div>
       </div>
@@ -47,10 +48,12 @@ import useUserModal from "../../composables/useUserModal";
 import useSidebar from "../../composables/useSidebar";
 import Login from "../ui/Login.vue";
 import Register from "../ui/Register.vue";
+import Authenticated from "../ui/Authenticated.vue";
 export default {
   components: {
     Login,
     Register,
+    Authenticated,
   },
   setup() {
     const {

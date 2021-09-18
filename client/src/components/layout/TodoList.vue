@@ -36,26 +36,21 @@
         </svg>
       </button>
     </div>
-    <div class="todos">
+    <div class="todos" :style="{ height: `calc(${height}px - 14rem)` }">
       <div class="todo-container">
         <div class="todo"></div>
-        <div class="todo-bg"></div>
       </div>
       <div class="todo-container">
         <div class="todo"></div>
-        <div class="todo-bg"></div>
       </div>
       <div class="todo-container">
         <div class="todo"></div>
-        <div class="todo-bg"></div>
       </div>
       <div class="todo-container">
         <div class="todo"></div>
-        <div class="todo-bg"></div>
       </div>
       <div class="todo-container">
         <div class="todo"></div>
-        <div class="todo-bg"></div>
       </div>
     </div>
   </div>
@@ -63,9 +58,17 @@
 
 <script>
 import AddTodo from "../ui/AddTodo.vue";
+import useWindowSize from "../../composables/useWindowSize";
 export default {
   components: {
     AddTodo,
+  },
+  setup() {
+    const { height } = useWindowSize();
+
+    return {
+      height,
+    };
   },
 };
 </script>
@@ -87,9 +90,12 @@ export default {
 
 .todo-container {
   width: 100%;
-  height: 25rem;
-  margin-top: 1rem;
+  height: 5rem;
   position: relative;
+}
+
+.todo-container:not(:last-child) {
+  margin-bottom: 1rem;
 }
 
 .todo {
@@ -97,21 +103,35 @@ export default {
   height: 100%;
   border: 1px solid white;
   border-radius: var(--rounded);
-  background-color: var(--gray);
   position: relative;
   z-index: 1;
+  background-color: var(--gray);
 }
 
-.todo-bg {
-  background-color: black;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  bottom: -8px;
-  right: -8px;
-  border-radius: var(--rounded);
+.todo:hover {
+  cursor: grab;
 }
 
 .todos {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 0 7px;
+  margin-top: 1rem;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 10px;
 }
 </style>

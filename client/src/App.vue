@@ -14,10 +14,12 @@
 </template>
 
 <script>
+import useAuth from "./composables/useAuth";
 import useCurrentTime from "./composables/useCurrentTime";
+import useWindowSize from "./composables/useWindowSize";
 import Sidebar from "./components/layout/Sidebar.vue";
 import UserModal from "./components/ui/UserModal.vue";
-import useWindowSize from "./composables/useWindowSize";
+import { onMounted } from "@vue/runtime-core";
 export default {
   name: "Home",
   components: {
@@ -25,8 +27,13 @@ export default {
     UserModal,
   },
   setup() {
+    const { loadUser } = useAuth();
     const { width, height } = useWindowSize();
     const { currentTime } = useCurrentTime();
+
+    onMounted(async () => {
+      await loadUser();
+    });
 
     return {
       width,

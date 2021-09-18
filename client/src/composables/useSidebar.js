@@ -10,19 +10,19 @@ const state = reactive({
   currentSidebar: sidebars.todoList,
 });
 
+const setShowSidebar = (newShowSidebar) => {
+  state.showSidebar = newShowSidebar;
+};
+
+const hideSidebar = () => {
+  setShowSidebar(false);
+};
+
+const setCurrentSidebar = (newSidebar) => {
+  state.currentSidebar = newSidebar;
+};
+
 export default () => {
-  const setShowSidebar = (newShowSidebar) => {
-    state.showSidebar = newShowSidebar;
-  };
-
-  const hideSidebar = () => {
-    setShowSidebar(false);
-  };
-
-  const setCurrentSidebar = (newSidebar) => {
-    state.currentSidebar = newSidebar;
-  };
-
   return {
     sidebars,
     ...toRefs(state),

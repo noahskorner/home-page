@@ -62,4 +62,14 @@ export default {
 .sidebar-full {
   max-width: 75%;
 }
+
+@media only screen and (max-width: 500px) {
+  .sidebar {
+    max-width: calc(100% - 4rem);
+  }
+
+  .sidebar-full {
+    max-width: calc(100% - 4rem);
+  }
+}
 </style>

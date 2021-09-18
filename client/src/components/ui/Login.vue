@@ -51,7 +51,7 @@ import API from "../../services/api";
 export default {
   setup() {
     const { views, setView, setErrors } = useUserModal();
-    const { setAccessToken, setRefreshToken } = useAuth();
+    const { setAccessToken, setRefreshToken, setIsAuthenticated } = useAuth();
     const state = reactive({
       email: "",
       password: "",
@@ -89,6 +89,8 @@ export default {
           const { accessToken, refreshToken } = response.data;
           setAccessToken(accessToken);
           setRefreshToken(refreshToken);
+          setIsAuthenticated(true);
+          setView(views.authenticated);
         } catch (error) {
           if (error.response) {
             if (error.response.data.errors) {

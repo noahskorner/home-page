@@ -6,10 +6,7 @@
   >
     <UserModal />
     <Sidebar />
-    <div class="current-time">
-      <h1>{{ currentTime }}</h1>
-      <h2>Welcome home, Noah</h2>
-    </div>
+    <div class="current-time"></div>
   </div>
 </template>
 
@@ -55,13 +52,10 @@ export default {
   align-items: center;
 }
 .current-time {
-  color: white;
-  font-size: var(--font-xl);
-  text-align: center;
-  padding: 2rem 1rem;
-  border-radius: 1rem;
-  margin: 1rem;
-  font-size: 5rem;
+  border-radius: 50%;
+  border: 1px solid white;
+  width: 50rem;
+  height: 50rem;
 }
 
 .current-time > h2 {

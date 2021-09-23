@@ -17,6 +17,7 @@ const state = reactive({});
 Object.assign(state, defaultState);
 
 const loadUser = async () => {
+  // TODO: Get refresh token from cookie
   const localRefreshToken = localStorage.getItem("refreshToken");
 
   if (localRefreshToken) {
@@ -33,8 +34,15 @@ const setAccessToken = (newAccessToken) => {
 };
 
 const setRefreshToken = (newRefreshToken) => {
+  // TODO: Remove this -> token will be stored in SET-COOKIE
   localStorage.setItem("refreshToken", newRefreshToken);
   state.refreshToken = newRefreshToken;
+};
+
+const removeTokens = () => {
+  state.accessToken = null;
+  state.refreshToken = null;
+  localStorage.removeItem("refreshToken");
 };
 
 const setIsAuthenticated = (newIsAuthenticated) => {
@@ -56,14 +64,14 @@ const refreshToken = async () => {
   } catch (error) {
     if (error.response) {
       if (error.response.data.errors) {
-        console.log(error.response.data.errors);
+        console.log(error.response);
       } else {
-        console.log(error.response.data.errors);
+        console.log(error.response);
       }
     } else if (error.request) {
-      console.log(error.response.data.errors);
+      console.log(error.message);
     } else {
-      console.log(error.response.data.errors);
+      console.log(error.message);
     }
   }
 };
@@ -73,21 +81,23 @@ const logout = async () => {
     const response = await API.logout({
       token: state.refreshToken,
     });
-    console.log(response);
+    const { success, message } = response.data;
+    console.log(success, message);
 
+    removeTokens();
     setView(views.login);
     Object.assign(state, defaultState);
   } catch (error) {
     if (error.response) {
       if (error.response.data.errors) {
-        console.log(error.response.data.errors);
+        console.log(error.response);
       } else {
-        console.log(error.response.data.errors);
+        console.log(error.response);
       }
     } else if (error.request) {
-      console.log(error.response.data.errors);
+      console.log(error.message);
     } else {
-      console.log(error.response.data.errors);
+      console.log(error.message);
     }
   }
 };

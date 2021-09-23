@@ -23,7 +23,8 @@ export default {
   logout(payload) {
     return apiClient.post("/logout", payload);
   },
-  addTodo(payload) {
-    return apiClient.post("/todos", payload);
+  getTodos(accessToken) {
+    apiClient.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+    return apiClient.get("/todos");
   },
 };

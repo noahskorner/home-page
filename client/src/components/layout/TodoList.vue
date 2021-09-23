@@ -37,20 +37,11 @@
       </button>
     </div>
     <div class="todos" :style="{ height: `calc(${height}px - 14rem)` }">
-      <div class="todo-container">
-        <div class="todo"></div>
-      </div>
-      <div class="todo-container">
-        <div class="todo"></div>
-      </div>
-      <div class="todo-container">
-        <div class="todo"></div>
-      </div>
-      <div class="todo-container">
-        <div class="todo"></div>
-      </div>
-      <div class="todo-container">
-        <div class="todo"></div>
+      <div class="todo-container" v-for="todo in todos" :key="todo.id">
+        <div class="todo">
+          {{ todo.id }} {{ todo.title }} {{ todo.swimlane }} {{ todo.status }}
+          {{ todo.date_created }}
+        </div>
       </div>
     </div>
   </div>
@@ -59,15 +50,18 @@
 <script>
 import AddTodo from "../ui/AddTodo.vue";
 import useWindowSize from "../../composables/useWindowSize";
+import useTodos from "../../composables/useTodos";
 export default {
   components: {
     AddTodo,
   },
   setup() {
     const { height } = useWindowSize();
+    const { todos } = useTodos();
 
     return {
       height,
+      todos,
     };
   },
 };

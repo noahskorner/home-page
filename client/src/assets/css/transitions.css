@@ -100,11 +100,11 @@
 }
 
 .user-modal-enter-from {
-  transform: translateY(-0.5rem);
+  transform: translateY(-1rem);
   opacity: 0;
 }
 .user-modal-leave-to {
-  transform: translateY(-0.5rem);
+  transform: translateY(-1rem);
   opacity: 0;
 }
 
@@ -134,4 +134,3 @@
   0% { -webkit-transform: translateY(-7em); }
   100% { -webkit-transform: translateY(0%); }
 }
-

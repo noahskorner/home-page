@@ -1,6 +1,7 @@
 const pool = require("../db");
 const jwt = require("jsonwebtoken");
 const { emailRegex, accessTokenExpiration } = require("../common/constants");
+const e = require("cors");
 
 const validateNewUser = async (email, password1, password2) => {
   const errors = [];
@@ -20,12 +21,12 @@ const validateNewUser = async (email, password1, password2) => {
       errors.push("Password must contain at least 1 number.");
     if (!/[A-Z]/.test(password1))
       errors.push("Password must contain at least 1 uppercase letter.");
-
-    return errors;
   } catch (error) {
     console.log(error.message);
     errors.push("An unexpected error occurred. Please try again.");
   }
+
+  return errors;
 };
 
 const generateAccessToken = (user) => {
@@ -38,8 +39,26 @@ const generateRefreshToken = (user) => {
   return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
 };
 
-const validateTodo = (title) => {
-  return [];
+const validateTodo = async (swimlaneId, title) => {
+  const errors = [];
+
+  try {
+    const result = await pool.query(
+      "SELECT * FROM swimlanes WHERE id = $1 LIMIT 1",
+      [swimlaneId]
+    );
+
+    if (!result.rows[0]) errors.push("Swimlane does not exist.");
+    if (title === null || title === undefined || title === "")
+      errors.push("Title cannot be empty.");
+
+    return errors;
+  } catch (error) {
+    console.log(error.message);
+    errors.push("An unexpected error occurred. Please try again.");
+  }
+
+  return errors;
 };
 
 module.exports = {

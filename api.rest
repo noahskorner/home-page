@@ -20,11 +20,6 @@ Content-Type:  application/json
     "password" : "Password123"
 }
 
-### Get all todos for a user
-GET http://localhost:3000/todos
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibm9haHNrb3JuZXJAZ21haWwuY29tIiwiaWF0IjoxNjMxMjM5MjM2LCJleHAiOjE2MzEyMzkyNjF9.SLVm_5F005_rWgzIcPBJ-aytbH7PGWh9kTrCZ5PLaTc
-
 ### Refresh a token
 POST http://localhost:3000/refresh-token
 Content-Type: application/json
@@ -41,11 +36,26 @@ Content-Type: application/json
     "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImVtYWlsIjoibm9haHNrb3JuZXJAZ21haWwuY29tIiwiaWF0IjoxNjMxOTI4MDk0fQ.D7K_7g-myprzDX4rCY_a9EQjlMI7ldhPFfSfNFEASoY"
 }
 
-### Add a todo
-POST http://localhost:3000/todos
+### Add a swimlane
+POST http://localhost:3000/swimlanes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibm9haHNrb3JuZXJAZ21haWwuY29tIiwiaWF0IjoxNjMxMjQwNDAyLCJleHAiOjE2MzEyNDA0NjJ9.O5MPr-buGWmIPELgwlI85cE_37juRcSi0RHzP7XOisM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJub2Foc2tvcm5lckBnbWFpbC5jb20iLCJpYXQiOjE2MzIzNjA4MDUsImV4cCI6MTYzMjM2MjYwNX0.AqK6nNFY9-WPr1TDqLBF47zAfVkWw-Jt-qk0TmZmcmA
 
 {
-    "title" : "Put my plate away"
+    "name" : "Friday"
 }
+
+### Add a todo
+POST http://localhost:3000/todos
+Content-Type:  application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJub2Foc2tvcm5lckBnbWFpbC5jb20iLCJpYXQiOjE2MzIzNjA4MDUsImV4cCI6MTYzMjM2MjYwNX0.AqK6nNFY9-WPr1TDqLBF47zAfVkWw-Jt-qk0TmZmcmA
+
+{
+    "swimlaneId": 2,
+    "title" : "Take out the trash"
+}
+
+### Get all todos for a user
+GET http://localhost:3000/todos
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJub2Foc2tvcm5lckBnbWFpbC5jb20iLCJpYXQiOjE2MzIzNjA4MDUsImV4cCI6MTYzMjM2MjYwNX0.AqK6nNFY9-WPr1TDqLBF47zAfVkWw-Jt-qk0TmZmcmA

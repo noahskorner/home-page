@@ -14,16 +14,12 @@ const { refreshTokenExpiration } = require("./common/constants");
 const { authenticateToken } = require("./middleware/auth");
 
 // MIDDLEWARE
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:8080"],
+  })
+);
 app.use(express.json()); //req.body
-
-/*
-{
-  success,
-  message,
-  data
-}
-*/
 
 // ROUTES
 app.post("/register", async (req, res) => {
@@ -217,36 +213,82 @@ app.post("/logout", async (req, res) => {
   }
 });
 
-app.get("/todos", authenticateToken, async (req, res) => {
+app.post("/swimlanes", authenticateToken, async (req, res) => {
   try {
     const { user } = req;
-    const result = await pool.query("SELECT * FROM todos WHERE user_id = $1", [
-      user.id,
-    ]);
-    return res.json(result);
+    const { name } = req.body;
+
+    if (!name)
+      return res
+        .status(400)
+        .json({ success: false, message: "Name of swimlane cannot be empty." });
+    else {
+      const result = await pool.query(
+        "INSERT INTO swimlanes (user_id, name) VALUES ($1, $2) RETURNING *",
+        [user.id, name]
+      );
+
+      const swimlane = result.rows[0];
+      return res.status(200).json({
+        success: true,
+        message: `'${name}' swimlane succesfully created.`,
+        data: { swimlane },
+      });
+    }
   } catch (error) {
     console.log(error.message);
-    return res.sendStatus(500);
+    return res.status(500).json({
+      success: false,
+      message: "An unknown error has occurred. Please try again.",
+    });
   }
 });
 
 app.post("/todos", authenticateToken, async (req, res) => {
   try {
     const { user } = req;
-    const { title } = req.body;
+    const { swimlaneId, title } = req.body;
 
-    const errors = await validateTodo(title);
-
-    if (errors.length) return res.status(400).json({ errors });
+    const errors = await validateTodo(swimlaneId, title);
+    if (errors.length)
+      return res.status(400).json({
+        success: false,
+        message: "Unable to create new todo.",
+        data: errors,
+      });
     else {
       const result = await pool.query(
-        "INSERT INTO todos (user_id, title) VALUES ($1, $2) RETURNING *",
-        [user.id, title]
+        "INSERT INTO todos (user_id, swimlane_id, title) VALUES ($1, $2, $3) RETURNING *",
+        [user.id, swimlaneId, title]
       );
 
-      const newTodo = result.rows[0];
-      return res.status(200).json(newTodo);
+      return res.status(200).json({
+        success: true,
+        message: "Todo successfully created.",
+        data: result.rows[0],
+      });
     }
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "An unknown error has occurred. Please try again.",
+    });
+  }
+});
+
+app.get("/todos", authenticateToken, async (req, res) => {
+  try {
+    const { user } = req;
+    const result = await pool.query(
+      "SELECT t.id, t.date_created, t.user_id, t.swimlane_id, t.title, t.description, t.status, s.name AS swimlane FROM todos AS t JOIN swimlanes AS s ON t.swimlane_id = s.id WHERE t.user_id = $1 ORDER BY s.date_created, t.date_created;",
+      [user.id]
+    );
+    return res.json({
+      success: true,
+      message: `Found ${result.rows.length} todos for user ${user.email}`,
+      data: result.rows,
+    });
   } catch (error) {
     console.log(error.message);
     return res.sendStatus(500);

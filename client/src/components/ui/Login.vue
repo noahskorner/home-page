@@ -1,6 +1,6 @@
 <template>
   <!-- Login -->
-  <div class="user-view">
+  <div class="user-view" @keyup.enter="loginUser">
     <div class="input-group">
       <label for="email">Email</label>
       <input
@@ -32,7 +32,7 @@
       </p>
     </div>
     <div class="shadow-btn btn-container">
-      <button class="text-btn" @click="loginUser()">Login</button>
+      <button class="text-btn" @click="loginUser">Login</button>
       <div class="shadow-btn-bg"></div>
     </div>
     <p class="subscript">

@@ -27,4 +27,8 @@ export default {
     apiClient.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
     return apiClient.get("/todos");
   },
+  postTodos(payload, accessToken) {
+    apiClient.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+    return apiClient.post("/todos", payload);
+  },
 };

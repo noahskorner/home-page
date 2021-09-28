@@ -6,7 +6,9 @@
   >
     <UserModal />
     <Sidebar />
-    <div class="current-time"></div>
+    <div class="current-time">
+      <h2>{{ currentTime }}</h2>
+    </div>
   </div>
 </template>
 
@@ -50,14 +52,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: white;
 }
-.current-time {
-  border-radius: 50%;
-  border: 1px solid white;
-  width: 50rem;
-  height: 50rem;
-}
-
 .current-time > h2 {
   font-size: 2rem;
 }

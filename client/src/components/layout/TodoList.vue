@@ -1,67 +1,100 @@
 <template>
   <div class="sidebar-container">
-    <AddTodo />
-    <div class="swimlane-controls">
-      <button class="btn">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="ai ai-ChevronLeft"
+    <AddTodo
+      :swimlaneId="swimlanes.length ? swimlanes[currentSwimlane].id : -1"
+    />
+    <div class="swimlane" v-if="swimlanes.length">
+      <div class="swimlane-controls">
+        <button class="btn" @click="previousSwimlane">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="ai ai-ChevronLeft"
+          >
+            <path d="M15 4l-8 8 8 8" />
+          </svg>
+        </button>
+        <h6 class="current-swimlane">
+          {{ swimlanes[currentSwimlane].name }}
+        </h6>
+        <button class="btn" @click="nextSwimlane">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="ai ai-ChevronRight"
+          >
+            <path d="M8 4l8 8-8 8" />
+          </svg>
+        </button>
+      </div>
+      <div class="todos" :style="{ height: `calc(${height}px - 14rem)` }">
+        <div
+          class="todo-container"
+          v-for="todo in sortedTodos[swimlanes[currentSwimlane].id]"
+          :key="todo.id"
         >
-          <path d="M15 4l-8 8 8 8" />
-        </svg>
-      </button>
-      <h6 class="current-swimlane">Current swimlane</h6>
-      <button class="btn">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="ai ai-ChevronRight"
-        >
-          <path d="M8 4l8 8-8 8" />
-        </svg>
-      </button>
-    </div>
-    <div class="todos" :style="{ height: `calc(${height}px - 14rem)` }">
-      <div class="todo-container" v-for="todo in todos" :key="todo.id">
-        <div class="todo">
-          {{ todo.id }} {{ todo.title }} {{ todo.swimlane }} {{ todo.status }}
-          {{ todo.date_created }}
+          <div class="todo">
+            {{ todo.title }} {{ timeSince(todo.date_created) }}
+          </div>
         </div>
       </div>
     </div>
+    <div class="empty-swimlane" v-else>You currently have no todos.</div>
   </div>
 </template>
 
 <script>
-import AddTodo from "../ui/AddTodo.vue";
+import { reactive, toRefs } from "@vue/reactivity";
+import { timeSince } from "../../common/functions";
 import useWindowSize from "../../composables/useWindowSize";
 import useTodos from "../../composables/useTodos";
+import AddTodo from "../ui/AddTodo.vue";
 export default {
   components: {
     AddTodo,
   },
   setup() {
     const { height } = useWindowSize();
-    const { todos } = useTodos();
+    const { sortedTodos, swimlanes } = useTodos();
+    const state = reactive({
+      currentSwimlane: 0,
+    });
+
+    const previousSwimlane = () => {
+      state.currentSwimlane =
+        state.currentSwimlane > 0
+          ? state.currentSwimlane - 1
+          : swimlanes.value.length - 1;
+    };
+    const nextSwimlane = () => {
+      state.currentSwimlane =
+        state.currentSwimlane < swimlanes.value.length - 1
+          ? state.currentSwimlane + 1
+          : 0;
+    };
 
     return {
       height,
-      todos,
+      sortedTodos,
+      swimlanes,
+      ...toRefs(state),
+      previousSwimlane,
+      nextSwimlane,
+      timeSince,
     };
   },
 };
@@ -89,7 +122,7 @@ export default {
 }
 
 .todo-container:not(:last-child) {
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .todo {
@@ -100,10 +133,6 @@ export default {
   position: relative;
   z-index: 1;
   background-color: var(--gray);
-}
-
-.todo:hover {
-  cursor: grab;
 }
 
 .todos {

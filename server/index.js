@@ -24,6 +24,13 @@ app.use(
 app.use(express.json()); //req.body
 
 // ROUTES
+app.get("/", async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "Health check passed.",
+  });
+});
+
 app.post("/register", async (req, res) => {
   try {
     const { email, password1, password2 } = req.body;

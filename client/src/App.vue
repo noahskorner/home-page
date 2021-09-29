@@ -7,7 +7,8 @@
     <UserModal />
     <Sidebar />
     <div class="current-time">
-      <h2>{{ currentTime }}</h2>
+      {{ currentTime }}
+      <h2></h2>
     </div>
   </div>
 </template>

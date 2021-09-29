@@ -16,9 +16,7 @@ const { authenticateToken } = require("./middleware/auth");
 // MIDDLEWARE
 app.use(
   cors({
-    origin: process.env.DEV_MODE
-      ? ["http://localhost:8080"]
-      : ["noahgothacked.com"],
+    origin: ["http://localhost:8080", "noahgothacked.com"],
   })
 );
 app.use(express.json()); //req.body

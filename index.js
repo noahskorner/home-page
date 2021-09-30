@@ -18,9 +18,9 @@ app.use(
   cors({
     origin: [
       /*       "http://localhost:8080", */
-      "noahgothacked.com",
-      "https://home-page-client.s3.amazonaws.com",
-      "http://home-page-client.s3-website-us-east-1.amazonaws.com",
+      "https://todos.noahgothacked.com",
+      /*       "https://home-page-client.s3.amazonaws.com",
+      "http://home-page-client.s3-website-us-east-1.amazonaws.com", */
     ],
   })
 );
@@ -292,14 +292,21 @@ app.post("/todos", authenticateToken, async (req, res) => {
 app.get("/todos", authenticateToken, async (req, res) => {
   try {
     const { user } = req;
-    const result = await pool.query(
-      "SELECT t.id, t.date_created, t.user_id, t.swimlane_id, t.title, t.description, t.status, s.name AS swimlane FROM todos AS t JOIN swimlanes AS s ON t.swimlane_id = s.id WHERE t.user_id = $1 ORDER BY s.date_created, t.date_created;",
+    const swimlanesResult = await pool.query(
+      "SELECT * FROM swimlanes WHERE user_id = $1 ORDER BY date_created;",
+      [user.id]
+    );
+    const todosResult = await pool.query(
+      "SELECT * FROM todos WHERE user_id = $1 ORDER BY date_created;",
       [user.id]
     );
     return res.json({
       success: true,
-      message: `Found ${result.rows.length} todos for user ${user.email}`,
-      data: result.rows,
+      message: `Found ${swimlanesResult.rows.length} swimlanes and ${todosResult.rows.length} todos for user ${user.email}`,
+      data: {
+        swimlanes: swimlanesResult.rows,
+        todos: todosResult.rows,
+      },
     });
   } catch (error) {
     console.log(error.message);
@@ -308,7 +315,7 @@ app.get("/todos", authenticateToken, async (req, res) => {
 });
 
 // SERVER START
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
-  console.log("Server listening on port 3000...");
+  console.log(`Server listening on port ${PORT}...`);
 });

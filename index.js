@@ -20,6 +20,7 @@ app.use(
       /*       "http://localhost:8080", */
       "noahgothacked.com",
       "https://home-page-client.s3.amazonaws.com",
+      "http://home-page-client.s3-website-us-east-1.amazonaws.com",
     ],
   })
 );

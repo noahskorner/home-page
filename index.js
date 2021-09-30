@@ -16,7 +16,11 @@ const { authenticateToken } = require("./middleware/auth");
 // MIDDLEWARE
 app.use(
   cors({
-    origin: ["http://localhost:8080", "noahgothacked.com"],
+    origin: [
+      /*       "http://localhost:8080", */
+      "noahgothacked.com",
+      "https://home-page-client.s3.amazonaws.com",
+    ],
   })
 );
 app.use(express.json()); //req.body

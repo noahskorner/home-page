@@ -1,7 +1,7 @@
 import axios from "axios";
 
-//const baseURL = "http://localhost:3000";
-const baseURL = "https://home-page-server.herokuapp.com/";
+const baseURL = "http://localhost:3000";
+//const baseURL = "https://home-page-server.herokuapp.com/";
 
 const apiClient = axios.create({
   baseURL: baseURL,
@@ -31,5 +31,9 @@ export default {
   postTodos(payload, accessToken) {
     apiClient.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
     return apiClient.post("/todos", payload);
+  },
+  postSwimlanes(payload, accessToken) {
+    apiClient.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+    return apiClient.post("/swimlanes", payload);
   },
 };

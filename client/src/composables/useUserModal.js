@@ -16,6 +16,10 @@ const toggleUserModal = () => {
   state.showUserModal = !state.showUserModal;
 };
 
+const displayUserModal = () => {
+  state.showUserModal = true;
+};
+
 const hideUserModal = () => {
   state.showUserModal = false;
 };
@@ -32,6 +36,7 @@ export default () => {
   return {
     views,
     ...toRefs(state),
+    displayUserModal,
     toggleUserModal,
     hideUserModal,
     setView,

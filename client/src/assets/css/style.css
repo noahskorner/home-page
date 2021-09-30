@@ -149,6 +149,11 @@ a, button {
   text-decoration: underline;
 }
 
+.subscript a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .error {
   font-size: var(--font-sm);
   color: red;

@@ -1,42 +1,49 @@
 import API from "../services/api";
-import { toRefs, reactive, watchEffect, computed } from "vue";
+import { toRefs, reactive, watchEffect } from "vue";
 import useAuth from "./useAuth";
 
 const { accessToken } = useAuth();
 
 const state = reactive({
   todos: [],
+  swimlanes: [],
 });
 
-const sortedTodos = computed(() => {
-  return state.todos.reduce((dict, todo) => {
-    if (!dict[todo.swimlane_id]) dict[todo.swimlane_id] = [todo];
-    else dict[todo.swimlane_id].push(todo);
+const setTodos = (todos) => {
+  state.todos = todos;
+};
 
-    return dict;
-  }, {});
-});
-
-const swimlanes = computed(() => {
-  return state.todos.reduce((arr, todo) => {
-    const findSwimlane = arr.find(
-      (swimlane) => swimlane.id === todo.swimlane_id
-    );
-    if (!findSwimlane) arr.push({ id: todo.swimlane_id, name: todo.swimlane });
-
-    return arr;
-  }, []);
-});
-
-const setTodos = (newTodos) => {
-  state.todos = newTodos;
+const setSwimlanes = (swimlanes) => {
+  state.swimlanes = swimlanes;
 };
 
 const loadTodos = async () => {
   try {
     const response = await API.getTodos(accessToken.value);
-    const todos = response.data.data;
+    const { swimlanes, todos } = response.data.data;
+    setSwimlanes(swimlanes);
     setTodos(todos);
+  } catch (error) {
+    // TODO: Check for 403 and refresh token
+    if (error.response) {
+      if (error.response.data.data) {
+        console.log(error.response);
+      } else {
+        console.log(error.response);
+      }
+    } else if (error.request) {
+      console.log(error.message);
+    } else {
+      console.log(error.message);
+    }
+  }
+};
+
+const addSwimlane = async (name) => {
+  try {
+    const response = await API.postSwimlanes({ name }, accessToken.value);
+    const { swimlane } = response.data.data;
+    state.swimlanes.push(swimlane);
   } catch (error) {
     // TODO: Check for 403 and refresh token
     if (error.response) {
@@ -87,9 +94,8 @@ watchEffect(async () => {
 
 export default () => {
   return {
-    sortedTodos,
-    swimlanes,
     ...toRefs(state),
     addTodo,
+    addSwimlane,
   };
 };
